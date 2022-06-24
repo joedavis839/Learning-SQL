@@ -1,0 +1,235 @@
+
+/*
+AGGREGATE FUNCTIONS - they gather data from many rows of a table, then aggregate it into a single value
+COUNT () - can be applicable to both numerical and non-numerical data
+SUM()
+MIN()
+MAX()
+AVG()
+Also called summary functions
+
+Aggregate functions typically ignore null values throughout the field to which they are applied 
+(only lif you have indicated a specifi column anmem within the parentheses)
+alternatively: COUNT(*)
+*returns the number of all rows of the table, NULL value included
+*/
+
+SELECT 
+    *
+FROM
+    salaries
+ORDER BY salary DESC
+LIMIT 10;
+
+SELECT 
+    COUNT(salary)
+FROM
+    salaries;
+
+
+/*
+count is applicable to both numerical and non-numerical data
+COUNT(DISTINCT ) - tells us how many unique values are encountered in a given column
+*/
+
+SELECT 
+    COUNT(DISTINCT from_date)
+FROM
+    salaries;
+    
+SELECT 
+    COUNT(*)
+FROM
+    salaries;
+    
+SELECT 
+    *
+FROM
+    dept_emp;
+
+    
+    
+    
+SELECT 
+    COUNT(DISTINCT dept_no)
+FROM
+    dept_emp;
+
+/*
+SUM()
+does what you think
+*/
+
+SELECT 
+    SUM(salary)
+FROM
+    salaries;
+    
+SELECT 
+    SUM(salary)
+FROM
+    salaries
+WHERE
+    from_date > '1997-01-01';
+    
+/*
+MAX()
+MIN()
+return the highest and lowest single values
+*/
+
+SELECT 
+    MAX(salary)
+FROM
+    salaries;
+
+SELECT 
+    MIN(salary)
+FROM
+    salaries;
+
+SELECT 
+    MIN(emp_no)
+FROM
+    employees;
+
+SELECT 
+    MAX(emp_no)
+FROM
+    employees;
+
+/*
+AVG()
+extracts average value from all non-null values
+*/
+
+SELECT 
+    AVG(salary)
+FROM
+    Salaries;
+    
+SELECT 
+    AVG(salary)
+FROM
+    Salaries
+WHERE
+    from_date > '1997-01-01';
+
+
+/*
+ROUND(#, decimal_places)
+numberic, or math, function you can use
+-usually applied to the single values that aggregate funtions return
+*/
+
+SELECT 
+    ROUND(AVG(salary), 2)
+FROM
+    salaries;
+
+SELECT 
+    ROUND(AVG(salary), 2)
+FROM
+    salaries
+WHERE
+    from_date > '1997-01-01';
+
+/*
+IF NULL() and COALESCE() are among the advanced SQL functions. They are used when null values are dispersed in you data table
+and you would like to substitute the null values with another value
+*/
+
+SELECT
+	*
+FROM
+	departments_dup;
+    
+ALTER TABLE departments_dup
+CHANGE COLUMN dept_name dept_name VARCHAR(40) NULL;
+
+INSERT INTO departments_dup(dept_no) VALUE ('d010'), ('d011');
+
+SELECT
+	*
+FROM
+	departments_dup
+ORDER BY dept_no ASC;
+
+
+ALTER TABLE employees.departments_dup
+ADD COLUMN dept_manager VARCHAR(255) NULL AFTER dept_name;
+
+
+COMMIT;
+
+/*
+IFNULL(expression_1, expression_2)
+returns the first of the 2 indicated values if the data value found in the table is not null
+and returns the second value if there is a null values
+
+-prints the returned value in the column of the output
+
+Importantly it cannot contain more than 2 parameters, if you want more than 2 you must use coalesc
+
+COALESCE (expression_1, expression_2,..., expression_N)
+allows you to insert N arguments in the parentheses
+-think of coalesce as ifnull with more than 2 parameters
+-COALESCE will always return a single value of the ones we have within parentheses and this value will be the first
+non-null value of this list, reading the values from left to right
+
+these functions are just for getting particular outputs, it doesn't actually change the data
+
+*/
+
+SELECT
+	dept_no,
+    IFNULL(dept_name, 'Department name not provided') as dept_name
+FROM
+	departments_dup;
+    
+    
+SELECT
+	dept_no,
+    COALESCE(dept_name, 'Department name not provided') as dept_name
+FROM
+	departments_dup;
+    
+SELECT
+	dept_no,
+    dept_name,
+    COALESCE(dept_manager, dept_name, 'N/A') AS dept_manager
+FROM
+	departments_dup
+ORDER BY
+	dept_no ASC
+;
+    
+/*
+if you only have one argument in the coalesce functions - the value indicated as an argument will be displayed
+*/    
+    
+    
+SELECT
+	dept_no,
+    dept_name,
+    COALESCE('Department manager name') AS fake_col
+FROM
+	departments_dup;
+    
+SELECT
+	dept_no,
+    dept_name,
+	COALESCE(dept_no, dept_name) AS dept_info
+FROM
+	departments_dup
+ORDER BY
+	dept_no ASC;
+    
+SELECT
+	IFNULL(dept_no, 'N/A') as dept_no,
+    IFNULL(dept_name, 'Department name not provided') as dept_name,
+COALESCE(dept_no, dept_name) AS dept_info
+FROM
+	departments_dup
+ORDER BY
+	dept_no ASC;
