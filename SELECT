@@ -1,0 +1,312 @@
+/*
+SELECT column_name (s)
+FROM table_name
+WHERE conditions
+GROUP BY column_name (s)
+HAVING conditions
+ORDER BY column_name (s);
+LIMIT number
+*/
+
+SELECT 
+    first_name, last_name
+FROM
+    employees;
+
+SELECT 
+    *
+FROM
+    employees;
+
+SELECT 
+    dept_no
+FROM
+    departments;
+
+SELECT 
+    *
+FROM
+    departments;
+
+
+select * from employees where first_name ='denis';
+select * from employees where first_name = 'elvis';
+
+select * from employees where first_name = 'denis' and gender = 'M';
+
+select * from employees where first_name = 'Kellie' and gender = 'F';
+
+select * from employees where first_name = 'denis' or first_name = 'elvis';
+
+/*
+the AND is for conditions set on different columns
+the OR is for conditions set on the same column
+*/
+
+Select * from employees where first_name = 'Kellie' or first_name = 'Aruna';
+
+/*
+logical operator procedure - the AND operator is applied first while the OR is applied second - parentheses can help you restructure
+*/
+
+Select * from employees where last_name = 'denis' and (gender = 'M' or gender = 'F');
+
+select * from employees where gender = 'F' and (first_name = 'Kellie' or first_name = 'Aruna');
+
+
+Select
+*
+from
+
+employees
+
+where
+first_name not IN ('Cathie', 'Mark', 'Nathan')
+;
+
+/*
+use 'in' when there are multiple conditions applied to a query
+*/
+
+select * from employees where first_name in ('denis', 'elvis');
+
+select * from employees where first_name not in ('john', 'mark', 'jacob');
+
+select * from employees where first_name like ('Mar%');
+
+select * from employees where first_name like ('Mar_');
+
+select * from employees where first_name not like ('%Mar%');
+
+/*
+wildcard characters
+the % sign is a substitue for a sequence of characters
+use the _ to match a single character
+use the * for "all"
+*/
+
+select * from employees where first_name like ('Mark%');
+
+select * from employees where hire_date like ('%2000%');
+
+select * from employees where emp_no like ('1000_');
+
+select * from employees where first_name like ('%jack%');
+
+select * from employees where first_name not like ('%jack%');
+
+/*
+Between and not between always paired with and
+between includes the selected parameters
+not between excludes the selected parameters
+*/
+
+select * from employees where hire_date between '1990-01-01' and '2000-01-01';
+
+select * from employees where hire_date not between '1990-01-01' and '2000-01-01';
+
+select * from salaries where salary between '66000' and '70000';
+
+select * from employees where emp_no not between '10004' and '10012';
+
+select dept_name from departments where dept_no between 'd003' and 'd006';
+
+
+/*
+not null - used to extract data values that are not null
+null-used to extract data values that are not null
+*/
+
+select * from employees where first_name is not null;
+
+select * from employees where first_name is null;
+
+select dept_name from departments where dept_no is not null;
+
+/*
+with the math comparison operators they're all what you'd expect, except for not equal which is '<>' or '!='
+*/
+
+select * from employees where first_name = 'mark';
+
+select * from employees where first_name <> 'mark';
+
+select * from employees where hire_date > '2000-01-01';
+
+select * from employees where hire_date < '1985-02-01';
+
+select * from employees where gender= 'F' and hire_date >= '2000-01-01';
+
+select * from salaries where salary > '150000';
+
+select gender from employees;
+
+/*
+retrieve a list without duplicate values use "select distinct"
+*/
+select distinct gender from employees;
+
+select distinct hire_date from employees;
+
+/*
+aggregate functions are applied on multiple rows of a single column of a table and return an output of a single value
+count () - counts non-null records in a field
+sum () - sums all the non-null values in a column
+min () - returns the minimum value from the entire list
+max () - returns the maximum value from the entire list
+avg () - caluclate the average of all non-null values belonging to a certain column of a table
+*/
+
+select count(emp_no) from employees;
+
+select count(first_name) from employees;
+
+select count(distinct first_name) from employees;
+
+select count(*) from salaries where salary >= 100000;
+
+select count(*) from dept_manager;
+
+/*
+order by at the end of the query will order things by your selected field
+at the end of the query you can put "ASC" to get things in ascending order or "DESC" to get things in descending order
+*/
+
+
+select * from employees order by first_name DESC;
+
+select * from employees order by emp_no desc;
+
+/*
+this orders the first names alphabetically first and then repeat names will be sorted by the last name alphabetically
+*/
+
+select * from employees order by first_name, last_name asc;
+
+select * from employees order by hire_date desc;
+
+/*
+group by - results can be grouped according to a specific field or fields
+group by is placed after the where condition and just before the order by clause
+only distinct values are selected when using group by
+in most cases we use a group by clause in our query when you need an aggregate function
+*/
+
+select first_name from employees group by first_name;
+
+SELECT 
+    first_name, COUNT(first_name)
+FROM
+    employees
+GROUP BY first_name
+ORDER BY first_name ASC;
+
+/*
+alias can rename a selection from you query
+"AS"
+*/
+
+SELECT 
+    first_name AS Name, COUNT(first_name) AS Names_Count
+FROM
+    employees
+GROUP BY first_name
+ORDER BY first_name ASC;
+
+Select salary, count(emp_no) AS emps_with_same_salary
+From salaries
+where salary > 80000
+group by salary
+order by salary asc;
+
+/*
+HAVING - refines the output from records that do no satisfy a certain condition
+similar to the WHERE input but it applies to the GROUP BY block
+after HAVING you can have a condition with an aggregate function, while WHERE cannot use aggregate functions within this conditions
+*/
+
+select * from employees where hire_date >= '2000-01-01';
+
+select * from employees having hire_date >= '2000-01-01';
+
+select 
+	first_name, Count(first_name) AS names_count
+from 
+	employees
+where
+	Count(first_name) > 250
+group by first_name
+order by first_name;
+
+select 
+	first_name, Count(first_name) AS names_count
+from 
+	employees
+group by 
+	first_name
+HAVING
+	Count(first_name) > 250
+order by 
+	first_name;
+    
+    
+Select
+	emp_no, AVG(salary)
+FROM
+	salaries
+group by
+	emp_no
+Having
+	avg(salary) > 120000
+order by
+	emp_no;
+    
+select emp_no, avg(salary)
+from salaries
+group by emp_no
+having avg(salary)>120000
+order by emp_no
+;
+
+select
+first_name, count(first_name) as name_count
+from
+employees
+where
+hire_date > '1999-01-01'
+group by
+first_name
+having
+count(first_name)<200
+order by
+first_name asc;
+
+/*
+Cannot have both an aggregated and a non-aggregated statement in the HAVING clause
+
+Aggregate functions - use GROUP BY and HAVING
+
+General conditions - use WHERE
+*/
+
+select
+emp_no
+from
+dept_emp
+where from_date > '2000-01-01'
+group by emp_no
+having count(from_date)>1
+order by emp_no;
+
+
+
+
+select * from salaries
+order by emp_no desc
+limit 10;
+
+
+select * from dept_emp
+limit 100;
+
+
