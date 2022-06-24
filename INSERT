@@ -1,0 +1,139 @@
+
+/*
+INSERT STATEMENT
+INSERT INTO table_name (column_1, column_2,..., column_n)
+VALUES (value_1, value_2, ..., value_n);
+*/
+
+
+select 
+	*
+from 
+	employees
+order by 
+	emp_no desc
+limit 10;
+
+INSERT INTO employees
+(
+	emp_no, 
+	birth_date, 
+	first_name, 
+	last_name, 
+	gender, 
+	hire_date
+)
+values
+(
+	999901,
+	'1986-04-21',
+	'John',
+	'Smith',
+	'M',
+	'2011-01-01'
+ )
+ ;
+ 
+/*
+remember to write integers as plain numbers without quotes
+you can add in any order of column as long as the order for column and value is the same
+you don't have to put the columns if you're adjusting all of them
+*/
+
+INSERT INTO employees
+(
+	birth_date, 
+    emp_no, 
+	first_name, 
+	last_name, 
+	gender, 
+	hire_date
+)
+values
+(
+	'1973-03-26',
+    999903,
+	'Patricia',
+	'Lawrence',
+	'F',
+	'2005-01-01'
+ )
+ ;
+
+
+
+Select 
+	* 
+From 
+	titles 
+order by
+	emp_no desc
+limit 10;
+
+
+INSERT INTO titles
+VALUES
+(
+	999903,
+    'Senior Engineer',
+    '1997-10-01',
+    '9999-01-01'
+);
+
+SELECT
+	*
+FROM
+	dept_emp
+ORDER BY emp_no desc
+limit 10
+;
+
+INSERT INTO dept_emp
+VALUES
+(
+999903,
+'d005',
+'1997-10-01',
+'9999-01-01'
+);
+
+
+/*
+INSERT STATEMENT
+INSERT INTO table_2 (column_1, column_2,..., column_n)
+SELECT column_1, column_2, ..., column_n
+FROM table_1
+WHERE condition;
+*/
+
+
+select * from departments
+limit 10;
+
+
+create table departments_dup
+(
+	dept_no char(4) not null,
+    dept_name varchar(40) not null
+);
+
+
+select * from departments_dup;
+
+
+
+insert into departments_dup
+(
+	dept_no,
+    dept_name
+)
+select
+	*
+from
+	departments;
+    
+Insert into
+	departments
+values ('d010', 'Business Analysis');
+
+select * from departments;
