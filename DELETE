@@ -1,0 +1,49 @@
+
+/*
+DELETE FROM table_name
+WHERE conditions;
+*/
+
+/*
+DROP - deletes everything, won't be able to roll back to its initial state or to the last COMMIT statement
+
+TRUNCATE - removes all records from the table, as if you had used delete without a WHERE clause (auto-increment values will be reset)
+
+DELETE - removes records row by row, that correspond to the WHERE condition (auto-increment values will not be reset)
+*/
+
+
+
+
+USE employees;
+
+COMMIT;
+
+
+Select
+	*
+From
+	employees
+Where
+	emp_no = 999903;
+    
+DELETE FROM
+	employees
+WHERE
+	emp_no = 999903;
+    
+ROLLBACK;
+
+    
+SELECT
+	*
+FROM
+	departments_dup
+ORDER BY dept_no;
+
+DELETE FROM departments_dup;
+
+ROLLBACK;
+
+DELETE FROM departments
+WHERE dept_no = 'd010';
