@@ -1,0 +1,69 @@
+SELECT * FROM Crime_scene_report
+WHERE type= 'murder' AND date='20180115' AND city = 'SQL City';
+
+/*Security footage shows that there were 2 witnesses. 
+The first witness lives at the last house on "Northwestern Dr". 
+The second witness, named Annabel, lives somewhere on "Franklin Ave".*/
+
+SELECT * FROM person
+Where address_street_name = 'Northwestern Dr'
+Order By address_number desc
+LIMIT 1
+;
+
+/*
+id	    name	            license_id	  address_number	  address_street_name	    ssn
+14887	  Morty Schapiro	  118009	      4919	            Northwestern Dr	        111564949
+*/
+
+SELECT * FROM person
+Where name like 'Annabel%' AND address_street_name = 'Franklin Ave'
+;
+
+/*
+id	    name	            license_id	  address_number	  address_street_name	    ssn
+16371	  Annabel Miller	  490173	      103	              Franklin Ave	          318771143
+*/
+
+SELECT * FROM interview
+WHERE person_id = '14887' OR person_id = '16371';
+
+/*
+
+person_id	transcript
+14887	    I heard a gunshot and then saw a man run out. He had a "Get Fit Now Gym" bag. 
+          The membership number on the bag started with "48Z". Only gold members have those bags. 
+          The man got into a car with a plate that included "H42W".
+      
+16371	    I saw the murder happen, and I recognized the killer 
+          from my gym when I was working out last week on January the 9th.
+*/
+
+
+SELECT gfnm.id, gfnm.person_id, gfnm.name, gfnm.membership_status, gfnci.check_in_date 
+FROM get_fit_now_member gfnm
+	JOIN
+	get_fit_now_check_in gfnci ON gfnm.id = gfnci.membership_id
+WHERE
+	gfnm.membership_status = 'gold' AND gfnci.check_in_date = '20180109'
+	AND id like '%48Z%'
+	;
+  
+/*
+id	    person_id	  name	          membership_status	  check_in_date
+48Z7A	  28819	      Joe Germuska	  gold	              20180109
+48Z55 	67318	      Jeremy Bowers   gold	              20180109
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
